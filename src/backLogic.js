@@ -1,27 +1,25 @@
-const path = require("path");
 const express = require("express");
 const app = express();
+const fs = require("fs/promises");
+const files = ["index", "about", "contact-me", "404"];
 const PORT = 3000;
-
-// const fs = require("fs/promises");
-// const files = ["index", "about", "contact-me", "404"];
 //const http = require("http");
-// async function page(name) {
-//   const fileName = `./${name}.html`;
-//   try {
-//     return await fs.readFile(fileName, "utf8");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
+
+async function page(name) {
+  const fileName = `./${name}.html`;
+  try {
+    return await fs.readFile(fileName, "utf8");
+  } catch (err) {
+    console.log(err);
+  }
+}
 app.listen(PORT, () => {
-  console.log("Alive");
+  console.log("logged");
 });
-app.get("*", (req, res) => {
-  const fileName = req.url.substring(1) || "index";
-  res.sendFile(`${fileName}.html`, {
-    root: path.join(__dirname, "./public"),
-  });
+
+app.get("/", (req, res) => {
+  const fileName = req.params.name;
+  res.sendFile('../index.html', { root: path.join(__dirname) });
 });
 
 // http
@@ -50,4 +48,4 @@ app.get("*", (req, res) => {
 //         });
 //     }
 //   })
-//   .listen(PORT);
+//   .listen(8080);
