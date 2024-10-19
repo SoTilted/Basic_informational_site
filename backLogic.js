@@ -2,9 +2,20 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const PORT = 3000;
+const files = ["index", "about", "contact-me", "404"];
+
+app.listen(PORT, () => {
+  console.log("Alive");
+});
+app.get("*", (req, res) => {
+  let fileName = req.url.substring(1) || "index";
+  files.includes(fileName) ? fileName : (fileName = "404");
+  res.sendFile(`${fileName}.html`, {
+    root: path.join(__dirname, "./public"),
+  });
+});
 
 // const fs = require("fs/promises");
-// const files = ["index", "about", "contact-me", "404"];
 //const http = require("http");
 // async function page(name) {
 //   const fileName = `./${name}.html`;
@@ -14,15 +25,6 @@ const PORT = 3000;
 //     console.log(err);
 //   }
 // }
-app.listen(PORT, () => {
-  console.log("Alive");
-});
-app.get("*", (req, res) => {
-  const fileName = req.url.substring(1) || "index";
-  res.sendFile(`${fileName}.html`, {
-    root: path.join(__dirname, "./public"),
-  });
-});
 
 // http
 //   .createServer(function (req, res) {
